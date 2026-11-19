@@ -1,1 +1,9 @@
-
+table inet scanblock
+flush table inet scanblock
+table inet scanblock {
+    chain prerouting {
+        type filter hook prerouting priority mangle; policy accept;
+        ct state invalid counter log prefix "INVALID PACKETS  " drop
+        tcp flags & (fin | syn | rst | ack) != syn ct state new counter log prefix "NMAP SCANS  " drop
+    }
+}
